@@ -19,6 +19,8 @@ public class Setting extends JPanel {
 	JFrame frame;
 	Timer timer;
 	ArrayList<Firework> fireworks;
+	ArrayList<Star> stars;
+	int numStars;
 	int height;
 	int width;
 	ArrayList<Integer> shapeX;
@@ -40,6 +42,8 @@ public class Setting extends JPanel {
 
 	public Setting() {
 		fireworks = new ArrayList<Firework>();
+		stars = new ArrayList<Star>();
+		numStars = 30;
 		//useX = new ArrayList<Integer>();
 		//useY = new ArrayList<Integer>();
 		patternsToUse = new ArrayList<String>();
@@ -59,6 +63,8 @@ public class Setting extends JPanel {
 		setUpFrame.setLocationRelativeTo(null);
 		setUpPanel = new JPanel();	
 
+		fillStars();
+
 		setUpPanel.setLayout(new BoxLayout(setUpPanel, BoxLayout.PAGE_AXIS));
 		JButton startBtn = new JButton("Start");
 		startBtn.addActionListener(new StartListener());
@@ -75,6 +81,12 @@ public class Setting extends JPanel {
 		JPanel addingPanel = new JPanel();
 		
 		setUpFrame.setVisible(true);
+	}
+
+	public void fillStars() {
+		for(int i = 0; i < numStars; i++) {
+			stars.add(new Star(frame.getWidth(), frame.getHeight()));
+		}
 	}
 
 	public static void main(String[] args) {
@@ -163,6 +175,9 @@ public class Setting extends JPanel {
 			super.paintComponent(g);
 			//trailLength = 0;
 		//}//not gonna actually do it this way
+		for(Star s : stars) {
+			s.draw(g);
+		}
 		
 		for(Firework f : fireworks) {
 			f.draw(g);
@@ -186,6 +201,9 @@ public class Setting extends JPanel {
 				if(fireworks.get(i).lifespan < 10) {
 					fireworks.remove(fireworks.get(i));
 				}
+			}
+			for(Star s : stars) {
+				s.update();
 			}
 			frame.repaint();
 		}
